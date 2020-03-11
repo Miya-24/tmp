@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <winuser.h>
 #include <iostream>
-
+/*
 BOOL CALLBACK MyMonitorEnumProc( HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData )
 {
     MONITORINFOEX monitorInfo;
@@ -13,7 +13,7 @@ BOOL CALLBACK MyMonitorEnumProc( HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcM
      std::cout << monitorInfo.szDevice << std::endl;
     return TRUE;
 }
-
+*/
 int main()
 {
     /*
@@ -26,7 +26,7 @@ int main()
     */
     //EnumDisplayMonitors( NULL, NULL, MyMonitorEnumProc, 0 );
     char cmd[1024]  = {};
-    sprintf(cmd, "C:/Users/TOSHIKI/WorkSpace/CSharp/test %d", 100);
+    sprintf(cmd, "C:/Users/WorkSpace/CSharp/test %d", 100);
     system(cmd);
 
     return 0;
