@@ -26,7 +26,8 @@ int main()
     */
     //EnumDisplayMonitors( NULL, NULL, MyMonitorEnumProc, 0 );
     char cmd[1024]  = {};
-    sprintf(cmd, "C:/Users/WorkSpace/CSharp/test %d", 100);
+    //Brightness ソースはBrightness.cs
+    sprintf(cmd, "Brightness %d", 100);
     system(cmd);
 
     return 0;
