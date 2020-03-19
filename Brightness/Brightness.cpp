@@ -25,6 +25,10 @@ int main()
     return 0;
     */
     //EnumDisplayMonitors( NULL, NULL, MyMonitorEnumProc, 0 );
+    //ノートPCで確認
+    //PostMessage(HWND_BROADCAST, WM_SYSCOMMAND, SC_MONITORPOWER, 2);
+    //mouse_event(MOUSEEVENT_LEFTDOWN,0,0,0,0);
+    //mouse_event(MOUSEEVENT_LEFTUP,0,0,0,0);
     char cmd[1024]  = {};
     //Brightness ソースはBrightness.cs
     sprintf(cmd, "Brightness %d", 100);
