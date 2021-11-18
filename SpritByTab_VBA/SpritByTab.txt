@@ -1,0 +1,25 @@
+' ツール→参照設定→Microsoft Scripting Runtimeを追加
+
+Private Sub CommandButton1_Click()
+    Dim fso As New Scripting.FileSystemObject
+    Dim csvFile As Object
+    Dim csvData As String
+    Dim splitcsvData As Variant
+    Dim i As Integer
+    Dim j As Integer
+    
+    Set csvFile = fso.OpenTextFile("textfile.txt", 1)
+    i = 3
+    Do While csvFile.AtEndOfStream = False
+        csvData = csvFile.ReadLine
+        splitcsvData = Split(csvData, Chr(9))
+        j = UBound(splitcsvData)
+        For k = 0 To j
+            Cells(i, k + 1).Value = splitcsvData(k)
+        Next
+        i = i + 1
+    Loop
+    csvFile.Close
+    Set csvFile = Nothing
+    Set fso = Nothing
+End Sub
