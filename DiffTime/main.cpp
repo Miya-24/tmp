@@ -7,7 +7,7 @@
 int main()
 {
 	{
-		char szFileName[MAX_PATH] = { "D:\\src\\CPP\\TestTime\\AAA.txt"};
+		char szFileName[MAX_PATH] = { "C:\\file\\path\\file.txt"};
 		DWORD attr = GetFileAttributes(szFileName);
 
 		HANDLE hFile = CreateFile(szFileName, GENERIC_WRITE, 0, 0, OPEN_ALWAYS,
