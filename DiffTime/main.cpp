@@ -55,20 +55,24 @@ int main()
 		SystemTimeToFileTime(&nowSysTime, &nowFileTime);
 
 		// int64にキャスト
-		__int64* nTime1 = (__int64*)&CreationTime;
-		__int64* nTime2 = (__int64*)&nowFileTime;
+		__int64 nTime1 = static_cast<__int64>(CreationTime.dwHighDateTime) << 32 | CreationTime.dwLowDateTime;
+		__int64 nTime2 = static_cast<__int64>(nowFileTime.dwHighDateTime) << 32 | nowFileTime.dwLowDateTime;
 
 		// 経過秒
-		__int64 nDiffSec = (*nTime2 - *nTime1) / 10000 / 1000;
+		__int64 nDiffSec = (nTime2 - nTime1) / 10000 / 1000;
+		printf_s("経過秒 %lld\n", nDiffSec);
 
 		// 経過分
 		__int64 nDiffMinute = nDiffSec / 60;
+		printf_s("経過分 %lld\n", nDiffMinute);
 
 		// 経過時間
 		__int64 nDiffHour = nDiffSec / 60 / 60;
+		printf_s("経過時間 %lld\n", nDiffHour);
 
 		// 経過日数
 		__int64 nDiffDay = nDiffSec / 60 / 60 / 24;
+		printf_s("経過日数 %lld\n", nDiffDay);
 	}
 
 	{
