@@ -1,0 +1,83 @@
+Sub CompareSettings()
+    Dim ws1 As Worksheet, ws2 As Worksheet, wsOutput As Worksheet
+    Dim dict1 As Object, dict2 As Object
+    Dim i As Long
+    Dim key As Variant
+    Dim outputRow As Long
+    
+    ' ワークシートの参照
+    Set ws1 = ThisWorkbook.Sheets("Sheet1") ' 最初の表があるシート名
+    Set ws2 = ThisWorkbook.Sheets("Sheet2") ' 二つ目の表があるシート名
+    Set wsOutput = ThisWorkbook.Sheets("Output") ' 出力先のシート名。存在しなければ新規作成
+    
+    ' 出力シートの初期化
+    wsOutput.Cells.Clear
+    
+    ' 辞書の初期化
+    Set dict1 = CreateObject("Scripting.Dictionary")
+    Set dict2 = CreateObject("Scripting.Dictionary")
+    
+    ' 最初の表の設定名と設定値を辞書に格納
+    i = 1
+    Do While ws1.Cells(i, 1).Value <> ""
+        dict1(ws1.Cells(i, 1).Value) = ws1.Cells(i, 2).Value
+        i = i + 1
+    Loop
+    
+    ' 二つ目の表の設定名と設定値を辞書に格納
+    i = 1
+    Do While ws2.Cells(i, 1).Value <> ""
+        dict2(ws2.Cells(i, 1).Value) = ws2.Cells(i, 2).Value
+        i = i + 1
+    Loop
+    
+    ' 結果の出力
+    outputRow = 1
+    wsOutput.Cells(outputRow, 1).Value = "カテゴリ"
+    wsOutput.Cells(outputRow, 2).Value = "設定名"
+    wsOutput.Cells(outputRow, 3).Value = "設定値1"
+    wsOutput.Cells(outputRow, 4).Value = "設定値2"
+    outputRow = outputRow + 1
+    
+    ' 最初の表にだけある設定
+    For Each key In dict1.Keys
+        If Not dict2.exists(key) Then
+            wsOutput.Cells(outputRow, 1).Value = "1つ目だけにある"
+            wsOutput.Cells(outputRow, 2).Value = key
+            wsOutput.Cells(outputRow, 3).Value = dict1(key)
+            wsOutput.Cells(outputRow, 4).Value = ""
+            outputRow = outputRow + 1
+        End If
+    Next key
+    
+    ' 二つ目の表にだけある設定
+    For Each key In dict2.Keys
+        If Not dict1.exists(key) Then
+            wsOutput.Cells(outputRow, 1).Value = "2つ目だけにある"
+            wsOutput.Cells(outputRow, 2).Value = key
+            wsOutput.Cells(outputRow, 3).Value = ""
+            wsOutput.Cells(outputRow, 4).Value = dict2(key)
+            outputRow = outputRow + 1
+        End If
+    Next key
+    
+    ' 両方にある設定
+    For Each key In dict1.Keys
+        If dict2.exists(key) Then
+            If dict1(key) = dict2(key) Then
+                wsOutput.Cells(outputRow, 1).Value = "両方にあり設定値が同じ"
+                wsOutput.Cells(outputRow, 2).Value = key
+                wsOutput.Cells(outputRow, 3).Value = dict1(key)
+                wsOutput.Cells(outputRow, 4).Value = dict2(key)
+            Else
+                wsOutput.Cells(outputRow, 1).Value = "両方にあり設定値が異なる"
+                wsOutput.Cells(outputRow, 2).Value = key
+                wsOutput.Cells(outputRow, 3).Value = dict1(key)
+                wsOutput.Cells(outputRow, 4).Value = dict2(key)
+            End If
+            outputRow = outputRow + 1
+        End If
+    Next key
+    
+    MsgBox "比較が完了しました。"
+End Sub
