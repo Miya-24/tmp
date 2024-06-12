@@ -86,10 +86,11 @@ End Sub
 Sub CompareSettings2()
     Dim ws1 As Worksheet, ws2 As Worksheet, wsOutput As Worksheet
     Dim dict1 As Object, dict2 As Object
+    Dim originalDict1 As Object, originalDict2 As Object
     Dim i As Long
     Dim key As Variant
     Dim outputRow As Long
-    Dim settingName As String
+    Dim settingName As String, originalName As String
     
     ' ワークシートの参照
     Set ws1 = ThisWorkbook.Sheets("Sheet1") ' 最初の表があるシート名
@@ -102,26 +103,32 @@ Sub CompareSettings2()
     ' 辞書の初期化
     Set dict1 = CreateObject("Scripting.Dictionary")
     Set dict2 = CreateObject("Scripting.Dictionary")
+    Set originalDict1 = CreateObject("Scripting.Dictionary")
+    Set originalDict2 = CreateObject("Scripting.Dictionary")
     
     ' 最初の表の設定名と設定値を辞書に格納
     i = 1
     Do While ws1.Cells(i, 1).Value <> ""
-        settingName = ws1.Cells(i, 1).Value
+        originalName = ws1.Cells(i, 1).Value
+        settingName = originalName
         If Len(settingName) >= 7 And Mid(settingName, Len(settingName) - 6, 1) = "_" Then
             settingName = Left(settingName, Len(settingName) - 7)
         End If
         dict1(settingName) = ws1.Cells(i, 2).Value
+        originalDict1(settingName) = originalName
         i = i + 1
     Loop
     
     ' 二つ目の表の設定名と設定値を辞書に格納
     i = 1
     Do While ws2.Cells(i, 1).Value <> ""
-        settingName = ws2.Cells(i, 1).Value
+        originalName = ws2.Cells(i, 1).Value
+        settingName = originalName
         If Len(settingName) >= 7 And Mid(settingName, Len(settingName) - 6, 1) = "_" Then
             settingName = Left(settingName, Len(settingName) - 7)
         End If
         dict2(settingName) = ws2.Cells(i, 2).Value
+        originalDict2(settingName) = originalName
         i = i + 1
     Loop
     
@@ -137,7 +144,7 @@ Sub CompareSettings2()
     For Each key In dict1.Keys
         If Not dict2.exists(key) Then
             wsOutput.Cells(outputRow, 1).Value = "1つ目だけにある"
-            wsOutput.Cells(outputRow, 2).Value = key
+            wsOutput.Cells(outputRow, 2).Value = originalDict1(key)
             wsOutput.Cells(outputRow, 3).Value = dict1(key)
             wsOutput.Cells(outputRow, 4).Value = ""
             outputRow = outputRow + 1
@@ -148,7 +155,7 @@ Sub CompareSettings2()
     For Each key In dict2.Keys
         If Not dict1.exists(key) Then
             wsOutput.Cells(outputRow, 1).Value = "2つ目だけにある"
-            wsOutput.Cells(outputRow, 2).Value = key
+            wsOutput.Cells(outputRow, 2).Value = originalDict2(key)
             wsOutput.Cells(outputRow, 3).Value = ""
             wsOutput.Cells(outputRow, 4).Value = dict2(key)
             outputRow = outputRow + 1
@@ -160,12 +167,12 @@ Sub CompareSettings2()
         If dict2.exists(key) Then
             If dict1(key) = dict2(key) Then
                 wsOutput.Cells(outputRow, 1).Value = "両方にあり設定値が同じ"
-                wsOutput.Cells(outputRow, 2).Value = key
+                wsOutput.Cells(outputRow, 2).Value = originalDict1(key)
                 wsOutput.Cells(outputRow, 3).Value = dict1(key)
                 wsOutput.Cells(outputRow, 4).Value = dict2(key)
             Else
                 wsOutput.Cells(outputRow, 1).Value = "両方にあり設定値が異なる"
-                wsOutput.Cells(outputRow, 2).Value = key
+                wsOutput.Cells(outputRow, 2).Value = originalDict1(key)
                 wsOutput.Cells(outputRow, 3).Value = dict1(key)
                 wsOutput.Cells(outputRow, 4).Value = dict2(key)
             End If
