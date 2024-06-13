@@ -91,6 +91,7 @@ Sub CompareSettings2()
     Dim key As Variant
     Dim outputRow As Long
     Dim settingName As String, originalName As String
+    Dim underscorePos As Long
     
     ' ワークシートの参照
     Set ws1 = ThisWorkbook.Sheets("Sheet1") ' 最初の表があるシート名
@@ -111,8 +112,9 @@ Sub CompareSettings2()
     Do While ws1.Cells(i, 1).Value <> ""
         originalName = ws1.Cells(i, 1).Value
         settingName = originalName
-        If Len(settingName) >= 7 And Mid(settingName, Len(settingName) - 6, 1) = "_" Then
-            settingName = Left(settingName, Len(settingName) - 7)
+        underscorePos = InStrRev(settingName, "_")
+        If underscorePos > 0 Then
+            settingName = Left(settingName, underscorePos - 1)
         End If
         dict1(settingName) = ws1.Cells(i, 2).Value
         originalDict1(settingName) = originalName
@@ -124,8 +126,9 @@ Sub CompareSettings2()
     Do While ws2.Cells(i, 1).Value <> ""
         originalName = ws2.Cells(i, 1).Value
         settingName = originalName
-        If Len(settingName) >= 7 And Mid(settingName, Len(settingName) - 6, 1) = "_" Then
-            settingName = Left(settingName, Len(settingName) - 7)
+        underscorePos = InStrRev(settingName, "_")
+        If underscorePos > 0 Then
+            settingName = Left(settingName, underscorePos - 1)
         End If
         dict2(settingName) = ws2.Cells(i, 2).Value
         originalDict2(settingName) = originalName
